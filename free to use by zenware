@@ -6,35 +6,92 @@ local whitelist = {
     ["example"] = "mypassword"
 }
 
+local tweenService = game:GetService("TweenService")
+
+local function playPopUpAnimation()
+    frame.Size = UDim2.new(0, 0, 0, 0)
+    local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out)
+    local goal = {Size = UDim2.new(0.4, 0, 0.4, 0)}
+    local tween = tweenService:Create(frame, tweenInfo, goal)
+    tween:Play()
+end
+
+playPopUpAnimation()
+
+local loginButton = Instance.new("TextButton")
+loginButton.Size = UDim2.new(0.8, 0, 0.1, 0)
+loginButton.Position = UDim2.new(0.1, 0, 0.55, 0)
+loginButton.Text = "Log In"
+loginButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+loginButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+loginButton.Font = Enum.Font.GothamBold
+loginButton.TextSize = 18
+loginButton.Parent = frame
+
+local loginButtonCorner = Instance.new("UICorner")
+loginButtonCorner.CornerRadius = UDim.new(0, 5)
+loginButtonCorner.Parent = loginButton
+
+local failedAttempts = 0  -- Track failed attempts
+
 local function onLoginButtonClick()
     local username = usernameBox.Text
     local password = passwordBox.Text
 
+    feedbackLabel.Text = "Processing..."
+    feedbackLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+    wait(2)
+
     if whitelist[username] and whitelist[username] == password then
-        screenGui:Destroy()
+        feedbackLabel.Text = "Login Successful!"
+        feedbackLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+        local goal = {Position = UDim2.new(0.5, 0, 0.5, 0), Size = UDim2.new(0, 0, 0, 0)}
+        local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Circular, Enum.EasingDirection.In)
+        local tween = tweenService:Create(frame, tweenInfo, goal)
+        tween:Play()
+
+        tween.Completed:Connect(function()
+            screenGui:Destroy()
+        end)
+
         print("Login successful!")
-        -- paste here whatever happens after sigma succesfully logs in so for example a loadstring of you script
+        -- paste here whatever you would like to happen when it is succesful
     else
-        usernameBox.Text = ""
-        passwordBox.Text = ""
-        maskedLabel.Text = ""
+        failedAttempts = failedAttempts + 1
+
+        -- Update feedback message based on remaining tries
+        if failedAttempts == 1 then
+            feedbackLabel.Text = "Incorrect username or password. 2 tries left."
+        elseif failedAttempts == 2 then
+            feedbackLabel.Text = "Incorrect username or password. 1 try left."
+        elseif failedAttempts >= 3 then
+            feedbackLabel.Text = "Too many failed attempts. Closing..."
+            wait(2)  -- Wait for a moment before destroying the GUI
+            screenGui:Destroy()  -- Destroy the GUI after 3 failed attempts
+            return
+        end
+        
+        feedbackLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+        -- Faster shake animation with shorter duration
+        local shakeTweenInfo = TweenInfo.new(0.03, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 6, true)
+        local shakeTween = tweenService:Create(frame, shakeTweenInfo, {Position = UDim2.new(0.3, math.random(-10, 10), 0.3, math.random(-10, 10))})
+        shakeTween:Play()
+
         print("Invalid username or password.")
     end
 end
 
 loginButton.MouseButton1Click:Connect(onLoginButtonClick)
 
-local function updateMaskedLabel()
-    maskedLabel.Text = string.rep("*", #passwordBox.Text)  -- Update with masked characters
-end
-
-passwordBox:GetPropertyChangedSignal("Text"):Connect(updateMaskedLabel)
 passwordBox.Focused:Connect(function()
-    maskedLabel.Visible = false
+    feedbackLabel.Visible = false
 end)
+
 passwordBox.FocusLost:Connect(function()
-    maskedLabel.Visible = true
-    updateMaskedLabel()
+    feedbackLabel.Visible = true
 end)
 
 local dragging
