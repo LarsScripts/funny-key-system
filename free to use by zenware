@@ -1,4 +1,97 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/LarsScripts/funny-key-system/refs/heads/main/booting",true))()
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0.4, 0, 0.4, 0)
+frame.Position = UDim2.new(0.3, 0, 0.3, 0)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
+
+local frameCorner = Instance.new("UICorner")
+frameCorner.CornerRadius = UDim.new(0, 10)
+frameCorner.Parent = frame
+
+local titleBar = Instance.new("Frame")
+titleBar.Size = UDim2.new(1, 0, 0.1, 0)
+titleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+titleBar.BorderSizePixel = 0
+titleBar.Parent = frame
+
+local titleBarCorner = Instance.new("UICorner")
+titleBarCorner.CornerRadius = UDim.new(0, 10)
+titleBarCorner.Parent = titleBar
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(0.8, 0, 1, 0)
+titleLabel.Position = UDim2.new(0.05, 0, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Login Screen"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 22
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.Parent = titleBar
+
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0.1, 0, 1, 0)
+closeButton.Position = UDim2.new(0.9, 0, 0, 0)
+closeButton.Text = "X"
+closeButton.BackgroundTransparency = 1
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 22
+closeButton.Parent = titleBar
+
+closeButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+local usernameBox = Instance.new("TextBox")
+usernameBox.Size = UDim2.new(0.8, 0, 0.1, 0)
+usernameBox.Position = UDim2.new(0.1, 0, 0.25, 0)
+usernameBox.PlaceholderText = "Enter Username"
+usernameBox.Text = ""
+usernameBox.ClearTextOnFocus = true
+usernameBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+usernameBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+usernameBox.Font = Enum.Font.Gotham
+usernameBox.TextSize = 18
+usernameBox.PlaceholderColor3 = Color3.fromRGB(160, 160, 160)
+usernameBox.Parent = frame
+
+local usernameCorner = Instance.new("UICorner")
+usernameCorner.CornerRadius = UDim.new(0, 5)
+usernameCorner.Parent = usernameBox
+
+local passwordBox = Instance.new("TextBox")
+passwordBox.Size = UDim2.new(0.8, 0, 0.1, 0)
+passwordBox.Position = UDim2.new(0.1, 0, 0.4, 0)
+passwordBox.PlaceholderText = "Enter Password"
+passwordBox.Text = ""
+passwordBox.ClearTextOnFocus = true
+passwordBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+passwordBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+passwordBox.Font = Enum.Font.Gotham
+passwordBox.TextSize = 18
+passwordBox.PlaceholderColor3 = Color3.fromRGB(160, 160, 160)
+passwordBox.Parent = frame
+
+local passwordCorner = Instance.new("UICorner")
+passwordCorner.CornerRadius = UDim.new(0, 5)
+passwordCorner.Parent = passwordBox
+
+local feedbackLabel = Instance.new("TextLabel")
+feedbackLabel.Size = UDim2.new(0.8, 0, 0.1, 0)
+feedbackLabel.Position = UDim2.new(0.1, 0, 0.7, 0)
+feedbackLabel.BackgroundTransparency = 1
+feedbackLabel.Text = ""
+feedbackLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+feedbackLabel.Font = Enum.Font.Gotham
+feedbackLabel.TextSize = 18
+feedbackLabel.TextXAlignment = Enum.TextXAlignment.Center
+feedbackLabel.Parent = frame
 --This is the whitelist so bassicly the existing users.
 local whitelist = {
     ["example"] = "ZenWareIsBest",
